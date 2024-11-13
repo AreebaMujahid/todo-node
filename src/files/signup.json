@@ -1,0 +1,66 @@
+[
+  {
+    "id": "c503ed9c-6202-49f3-936f-c2870d1747b6",
+    "firstName": "aiza",
+    "lastName": "aiza",
+    "email": "aiza@gmail.com",
+    "phoneno": "02435235627",
+    "role": "Merchant"
+  },
+  {
+    "id": "cf1f98ec-c6de-4444-aee5-6f61a6bdb410",
+    "firstName": "aira",
+    "lastName": "mujahid",
+    "email": "aira@gmail.com",
+    "phoneno": "06735263436",
+    "role": "Merchant"
+  },
+  {
+    "id": "d2efee32-6603-4da0-ae9b-5c8a713eff77",
+    "firstName": "rabia",
+    "lastName": "rabia",
+    "email": "rabia@gmail.com",
+    "phoneno": "02435235627",
+    "role": "Merchant"
+  },
+  {
+    "id": "27af6951-8a7a-4d6e-bd38-d02f2cb49dd1",
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "johndoe@example.com",
+    "phoneno": "1234567890",
+    "role": "Admin"
+  },
+  {
+    "id": "070ec57a-932f-4979-a79b-93d0392941df",
+    "firstName": "sana",
+    "lastName": "mujahid",
+    "email": "sana@gmail.com",
+    "phoneno": "03147572089",
+    "role": "Merchant"
+  },
+  {
+    "id": "ff6e8cc5-d607-43cc-bf93-3de50a9d4e88",
+    "firstName": "iqra",
+    "lastName": "mujahid",
+    "email": "iqra@gmail.com",
+    "phoneno": "03147572089",
+    "role": "Admin"
+  },
+  {
+    "id": "62810376-39e5-499c-9584-5c4400666be8",
+    "firstName": "aira",
+    "lastName": "adeel",
+    "email": "airaaaa@gmail.com",
+    "phoneno": "03147572089",
+    "role": "Admin"
+  },
+  {
+    "id": "4b80de9b-7c12-4006-a1e1-1dc347bf260d",
+    "firstName": "zara",
+    "lastName": "zara",
+    "email": "zara@gmail.com",
+    "phoneno": "03147572089",
+    "role": "Merchant"
+  }
+]
