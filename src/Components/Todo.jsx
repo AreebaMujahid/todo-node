@@ -8,6 +8,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 import { useMutation } from '@apollo/client';
 import { ADD_TASK_MUTATION } from '../client/src/graphql/mutations'; // Adjust the path if needed
 
+
 const Todo = () => {
     // State setup
     const [userInput, setUserInput] = useState("");
@@ -22,61 +23,43 @@ const Todo = () => {
     };
 
     // Add a new item
-    const addItem = async () => {
-        if (userInput.trim() !== "") {
-            const taskData = {
-                id: Math.random().toString(36).substr(2, 9),
-                description: userInput,
-                email: localStorage.getItem('userEmail'),
-            };
+const addItem = async () => {
+    if (userInput.trim() !== "") {
+        const taskData = {
+            id: Math.random().toString(36).substr(2, 9),
+            description: userInput,
+            email: localStorage.getItem('userEmail'),
+        };
 
-            console.log("Prepared task data:", taskData);
-            localStorage.setItem('taskId', taskData.id);
-            console.log("Task ID stored in localStorage:", taskData.id);
+        console.log("Prepared task data:", taskData);
+        localStorage.setItem('taskId', taskData.id);
+        console.log("Task ID stored in localStorage:", taskData.id);
 
-            try {
-                console.log("Attempting to send data to server:", JSON.stringify(taskData));
-                const response = await fetch("http://localhost:4000/Task", {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(taskData),
-                });
+        try {
+            
+            // Add the task using the Apollo Client mutation
+            const response = await addTask({
+                variables: {
+                    id: taskData.id,
+                    description: taskData.description,
+                    email: taskData.email,
+                },
+            });
 
-                console.log("Server response status:", response.status);
+            console.log("Task added successfully to Apollo server:", response.data.addTask);
+            
+            // Update the local state
+            setList([...list, response.data.addTask]);
+            setUserInput("");
 
-                if (response.ok) {
-                    const data = await response.json();
-                    localStorage.setItem('Id', data.task.id);
-                    console.log("Task ID saved in local storage:", data.task.id);
-
-                    setList([...list, taskData]);
-                    setUserInput("");
-
-                    alert("Task added successfully!");
-
-                    // Task addition in Apollo server
-                    await addTask({
-                        variables: {
-                            id: taskData.id,
-                            description: taskData.description,
-                            email: taskData.email,
-                        },
-                    });
-                    console.log("Task added successfully to Apollo server");
-                } else {
-                    console.error("Failed to add task. Server responded with:", response.statusText);
-                    const errorData = await response.json();
-                    console.error("Server error details:", errorData);
-                }
-            } catch (error) {
-                console.error("Error sending request to server:", error.message);
-            }
-        } else {
-            console.warn("No user input provided. Task not added.");
+            alert("Task added successfully!");
+        } catch (error) {
+            console.error("Error adding task using GraphQL:", error.message);
         }
-    };
+    } else {
+        console.warn("No user input provided. Task not added.");
+    }
+};
 
     // Delete an item
     const deleteItem = async (index) => {

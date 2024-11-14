@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { Formik, Field, ErrorMessage, Form } from "formik";
 import * as Yup from "yup";
 import "bootstrap/dist/css/bootstrap.css";
+import { LOGIN_MUTATION } from '../client/src/graphql/mutations.js';
+import { useMutation } from '@apollo/client';
+
 
 // Validation schema using Yup
 const FormSchema = Yup.object().shape({
@@ -16,6 +19,7 @@ const FormSchema = Yup.object().shape({
 });
 
 function Login() {
+    const [login] = useMutation(LOGIN_MUTATION);
     const navigate = useNavigate(); // Initialize navigate function
 
     return (
@@ -28,40 +32,20 @@ function Login() {
                 validationSchema={FormSchema}
                 onSubmit={async (values, { setSubmitting, resetForm }) => {
                     try {
-                        const response = await fetch("http://localhost:4000/Login", {
-                            method: "POST",
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(values),
-                        });
-                
-                        if (response.ok) {
-                            const data = await response.json();
-                
-                            if (data.token) {
-                                // Store the JWT token in localStorage
-                                localStorage.setItem('authToken', data.token);
-                                localStorage.setItem('userEmail', values.email);
-                                console.log("Login successful and token stored!");
-                
-                                alert("Login form submitted successfully, and token stored on the client.");
-                                resetForm();
-                                navigate("/todo"); 
-
-                            } else {
-                                console.error(data.message);
-                                alert("Login failed. Please try again.");
-                            }
-                        } else {
-                            alert("Login failed. Please try again.");
-                        }
-                    } catch (error) {
+                        
+                        const { data } = await login({ variables: values });
+                        alert('User login successfully using graphql');
+                        resetForm();
+                        navigate('/todo');
+                      } catch (error) {
                         console.error("Error:", error);
-                        alert("There was an error submitting the form.");
+                        alert('login failed in graphql');
+                        console.log("Submitted values:", values); // Log values to check the structure
+                      }
+                      setSubmitting(false);
                     }
-                    setSubmitting(false);
-                }}
+                    
+                }
                 
                 
             >

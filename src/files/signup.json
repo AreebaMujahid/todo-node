@@ -62,5 +62,29 @@
     "email": "zara@gmail.com",
     "phoneno": "03147572089",
     "role": "Merchant"
+  },
+  {
+    "id": "0080e7d2-ed5f-4939-8646-faae999fa57d",
+    "firstName": "phone",
+    "lastName": "phone",
+    "email": "phone@gmail.com",
+    "phoneno": "03147572089",
+    "role": "Merchant"
+  },
+  {
+    "id": "2c5b9277-dc71-4b7c-b578-cf96aca85bd4",
+    "firstName": "game",
+    "lastName": "game",
+    "email": "game@gmail.com",
+    "phoneno": "03147572089",
+    "role": "Admin"
+  },
+  {
+    "id": "a0208286-499e-4691-81e8-23e80cb19de3",
+    "firstName": "areeba",
+    "lastName": "areeba",
+    "email": "areeba@gmail.com",
+    "phoneno": "03147572089",
+    "role": "Admin"
   }
 ]

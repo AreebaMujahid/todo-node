@@ -22,9 +22,26 @@ const typeDefs = gql`
     phoneno: String
     role: String!
   }
+  type Login{
+    email: String!
+    phoneno: String
+  }
+  type Task {
+    id: String!
+    description: String!
+    email: String!
+  }
 
+  type Query {
+    getTasks: [Task]
+    getTaskById(id: String!): Task
+  }
+    
   type Mutation {
     signup(firstName: String!, lastName: String!, email: String!, phoneno: String, role: String!): User
+    login(email: String!,phoneno: String ): Login
+    addTask(id: String!, description: String!, email: String!): Task
+    updateTodo(id: ID!, description: String!): Todo
   }
 `;
 
