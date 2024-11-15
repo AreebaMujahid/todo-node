@@ -84,34 +84,45 @@ const addItem = async () => {
         }
     };
 
-    // Edit an item
     const editItem = async (index) => {
         const editedTodo = prompt('Edit the todo:', list[index].description);
         const taskId = localStorage.getItem('Id');
         console.log("task id from local storage:", taskId);
-
+    
         if (editedTodo !== null && editedTodo.trim() !== '') {
             const updatedTodos = [...list];
             updatedTodos[index].description = editedTodo;
             setList(updatedTodos);
-
-            const updatedData = {
-                description: editedTodo
+    
+            const graphqlQuery = {
+                query: `
+                    mutation UpdateTodo($id: ID!, $description: String!) {
+                        updateTodo(id: $id, description: $description) {
+                            id
+                            description
+                        }
+                    }
+                `,
+                variables: {
+                    id: taskId,
+                    description: editedTodo
+                }
             };
-
+    
             try {
-                const response = await fetch(`http://localhost:4000/Todo/${taskId}`, {
-                    method: 'PUT',
+                const response = await fetch('http://localhost:4000/graphql', {
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(updatedData)
+                    body: JSON.stringify(graphqlQuery)
                 });
-
-                if (response.ok) {
+    
+                const result = await response.json();
+                if (response.ok && result.data) {
                     console.log("Task updated successfully on the server.");
                 } else {
-                    console.error("Failed to update task on the server.");
+                    console.error("Failed to update task on the server:", result.errors);
                 }
             } catch (error) {
                 console.error("Error updating task on the server:", error);

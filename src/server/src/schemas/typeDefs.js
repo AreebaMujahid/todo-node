@@ -41,7 +41,7 @@ const typeDefs = gql`
     signup(firstName: String!, lastName: String!, email: String!, phoneno: String, role: String!): User
     login(email: String!,phoneno: String ): Login
     addTask(id: String!, description: String!, email: String!): Task
-    updateTodo(id: ID!, description: String!): Todo
+    updateTodo(id: ID!, description: String!): Task
   }
 `;
 

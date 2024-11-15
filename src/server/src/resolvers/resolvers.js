@@ -4,6 +4,7 @@
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
+const User = require('../../models/signup');
 
 
 
@@ -28,24 +29,16 @@ const writeUsers = (users , file) => {
 
 const resolvers = {
   Mutation: {
-    signup: (_, { firstName, lastName, email, phoneno, role }) => {
-      const users = readUsers(signupFilePath);
-      if (users.some(user => user.email === email)) {
-        throw new Error('Email already exists');
+    signup: async (_, { firstName, lastName, email, phoneno, role }) => {
+      try {
+        const user = new User({ firstName, lastName, email, phoneno, role });
+        await user.save(); // Save user to MongoDB
+        console.log("user successfully stored in mongodb");
+        return user;
+      } catch (error) {
+        console.error("Error creating user:", error);
+        throw new Error("Failed to create user");
       }
-
-      const newUser = {
-        id: uuidv4(),
-        firstName,
-        lastName,
-        email,
-        phoneno,
-        role,
-      };
-
-      users.push(newUser);
-      writeUsers(users, signupFilePath);
-      return newUser;
     },
     login: (_, { email, phoneno }) => {
       try {

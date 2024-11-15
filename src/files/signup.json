@@ -86,5 +86,37 @@
     "email": "areeba@gmail.com",
     "phoneno": "03147572089",
     "role": "Admin"
+  },
+  {
+    "id": "7d7d791e-3adc-404d-8901-4de7dd6e1b7a",
+    "firstName": "local",
+    "lastName": "local ",
+    "email": "local@gmail.com",
+    "phoneno": "03147572089",
+    "role": "Admin"
+  },
+  {
+    "id": "b8eaca7f-32cd-4210-a3b2-10d556b8d242",
+    "firstName": "react",
+    "lastName": "react",
+    "email": "react@gmail.com",
+    "phoneno": "03147572089",
+    "role": "Admin"
+  },
+  {
+    "id": "f1d068bc-1f1d-4455-baae-48f6966d46ed",
+    "firstName": "network",
+    "lastName": "network",
+    "email": "network@gmail.com",
+    "phoneno": "03147572089",
+    "role": "Admin"
+  },
+  {
+    "id": "8ec89c70-4c15-4660-a3eb-942a7c55a54e",
+    "firstName": "hp",
+    "lastName": "hp",
+    "email": "hp@gmail.com",
+    "phoneno": "03147572089",
+    "role": "Merchant"
   }
 ]
