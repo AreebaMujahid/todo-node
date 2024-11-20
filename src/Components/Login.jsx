@@ -13,9 +13,9 @@ const FormSchema = Yup.object().shape({
     email: Yup.string()
         .email("Invalid email")
         .required("Email is required"),
-    phoneno: Yup.string()
-        .matches(/^\d{11}$/, "Phone number must be exactly 11 digits")
-        .required("Phone number is required")
+    password: Yup.string()
+        .min(6, 'Password must be at least 6 characters')
+        .required('Password is required'),
 });
 
 function Login() {
@@ -28,24 +28,28 @@ function Login() {
             <h1>To Do App</h1>
             <h2>Login Here</h2>
             <Formik
-                initialValues={{ email: "" ,phoneno:""}}
+                initialValues={{ email: "" ,password:""}}
                 validationSchema={FormSchema}
                 onSubmit={async (values, { setSubmitting, resetForm }) => {
+                    console.log("Submitting values are")
                     try {
-                        
-                        const { data } = await login({ variables: values });
-                        alert('User login successfully using graphql');
+                      const { data } = await login({ variables: values });
+          
+                      if (data && data.login && data.login.token) {
+                        // Store the token in localStorage
+                        localStorage.setItem('authToken', data.login.token);
+                        alert('User logged in successfully');
                         resetForm();
-                        navigate('/todo');
-                      } catch (error) {
-                        console.error("Error:", error);
-                        alert('login failed in graphql');
-                        console.log("Submitted values:", values); // Log values to check the structure
+                        navigate('/todo'); // Redirect to the todo page
                       }
+                    } catch (error) {
+                      console.error("Login failed:", error);
+                      alert('Login failed: ' + error.message);
+                      console.log("Submitted values:", values);
+                    } finally {
                       setSubmitting(false);
                     }
-                    
-                }
+                  }}
                 
                 
             >
@@ -69,15 +73,15 @@ function Login() {
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="phoneno">Phone no</label>
+                            <label htmlFor="phoneno">Password</label>
                             <Field
-                                type="phoneno"
-                                name="phoneno"
-                                placeholder="Enter phone no"
+                                type="passowrd"
+                                name="password"
+                                placeholder="Enter password"
                                 className="form-control"
                             />
                             <ErrorMessage
-                                name="phoneno"
+                                name="password"
                                 component="div"
                                 className="text-danger"
                             />

@@ -5,6 +5,12 @@ const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const User = require('../../models/signup');
+const LoginUser = require('../../models/login');
+const { generateToken } = require('../../../services/auth');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+
 
 
 
@@ -29,40 +35,65 @@ const writeUsers = (users , file) => {
 
 const resolvers = {
   Mutation: {
-    signup: async (_, { firstName, lastName, email, phoneno, role }) => {
+    signup: async (_, { firstName, lastName, email, phoneno, role, password }) => {
       try {
-        const user = new User({ firstName, lastName, email, phoneno, role });
+        const user = new User({ firstName, lastName, email, phoneno, role , password });
         await user.save(); // Save user to MongoDB
         console.log("user successfully stored in mongodb");
-        return user;
+        // Generate JWT token
+        const token = generateToken(user);
+
+        // Return the user and token
+        return {
+          user,
+          token,
+        };
+        //return user;
       } catch (error) {
         console.error("Error creating user:", error);
         throw new Error("Failed to create user");
       }
     },
-    login: (_, { email, phoneno }) => {
+    login: async (_, { email, password }) => {
       try {
-        const users = readUsers(signupFilePath);
-        const loginUsers = readUsers(loginFilePath);
-        console.log('Loaded users:', users);
-        const user = users.find(user => user.email === email && user.phoneno === phoneno);
-    
+        // Check if the user exists
+        const user = await User.findOne({ email });
         if (!user) {
-          console.error('User not found for login attempt:', { email, phoneno });
-          throw new Error('User not found');
+          console.error('User not found:', email);
+          throw new Error('Email does not exist');
         }
     
-        const newLogin = { email: user.email, phoneno: user.phoneno };
-        console.log('Successful login:', newLogin);
+        // Compare the entered password with the hashed password
+        const isPasswordMatch = await bcrypt.compare(password, user.password);
+        if (!isPasswordMatch) {
+          console.error('Invalid password for user:', email);
+          throw new Error('Invalid password');
+        }
     
-        loginUsers.push(newLogin);
-        writeUsers(loginUsers, loginFilePath);
-        return newLogin;
+        // Generate a JWT token
+        const token = jwt.sign(
+          {
+            id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+          },
+          process.env.JWT_SECRET, // Use a secure secret from environment variables
+          { expiresIn: '1h' } // Token expiry time
+        );
+    
+        console.log('User successfully logged in:', user.email);
+    
+        return {
+          user,
+          token,
+        };
       } catch (error) {
         console.error('Login error:', error);
-        throw error;
+        throw new Error('Failed to log in');
       }
     },
+    
     addTask: (_, { id, description, email }) => {
       const tasks = readUsers(taskFilePath);
       const newTask = { id, description, email };

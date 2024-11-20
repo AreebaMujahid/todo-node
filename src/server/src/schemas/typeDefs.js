@@ -22,10 +22,13 @@ const typeDefs = gql`
     phoneno: String
     role: String!
   }
-  type Login{
-    email: String!
-    phoneno: String
-  }
+
+  
+  type AuthPayload {
+  user: User!
+  token: String!
+  }  
+
   type Task {
     id: String!
     description: String!
@@ -38,8 +41,8 @@ const typeDefs = gql`
   }
     
   type Mutation {
-    signup(firstName: String!, lastName: String!, email: String!, phoneno: String, role: String!): User
-    login(email: String!,phoneno: String ): Login
+    signup(firstName: String!, lastName: String!, email: String!, phoneno: String, role: String!, password: String!): AuthPayload
+    login(email: String!,password: String ): AuthPayload
     addTask(id: String!, description: String!, email: String!): Task
     updateTodo(id: ID!, description: String!): Task
   }
